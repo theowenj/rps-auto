@@ -27,7 +27,7 @@ def clear():
 def printhomescreen():
     print(" -----------------------")
     print("|        RPS-RNG        |")
-    print("|       By @OwenJ       |")
+    print("|       By @TheOwenJ       |")
     print(" -----------------------")
     print("1. Start Match")
     print("2. Check Stats")
