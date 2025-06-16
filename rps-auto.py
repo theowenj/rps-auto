@@ -2,24 +2,12 @@ import time
 import os
 import random
 import json
-import tkinter as tk
-from tkinter import messagebox
-inmenu = 1
 
+inmenu = 1
 SAVE_FILE = "rps_rng_save.json"
 
-def tkinter_available():
-    try:
-        root = tk.Tk()
-        root.withdraw()
-        root.update()
-        root.destroy()
-        return True
-    except:
-        return False
-
-stats_data = {"wins": 0, "losses": 0, "matches": 0, "tkinter_mode": False}
-stats_data["tkinter_mode"] = stats_data["tkinter_mode"] and tkinter_available()
+# Spelgegevens
+stats_data = {"wins": 0, "losses": 0, "matches": 0}
 
 def clear():
     os.system('cls' if os.name == 'nt' else 'clear')
@@ -27,7 +15,7 @@ def clear():
 def printhomescreen():
     print(" -----------------------")
     print("|        RPS-RNG        |")
-    print("|       By @TheOwenJ       |")
+    print("|       By @OwenJ       |")
     print(" -----------------------")
     print("1. Start Match")
     print("2. Check Stats")
@@ -37,10 +25,6 @@ def printhomescreen():
     print(" ")
 
 def playmatch():
-    if stats_data["tkinter_mode"]:
-        start_tkinter_match()
-        return
-
     global inmenu
     clear()
     choice = input("Choose r (Rock), p (Paper), s (Scissors): ").lower()
@@ -91,7 +75,6 @@ def stats():
     print("Matches:", stats_data["matches"])
     print("Wins:", stats_data["wins"])
     print("Losses:", stats_data["losses"])
-    print("Tkinter Mode:", "On" if stats_data["tkinter_mode"] else "Off")
     print(" -----------------------")
     input("Press Enter to continue...")
     clear()
@@ -140,17 +123,11 @@ def settings_menu():
     global inmenu
     clear()
     print("Settings:")
-    print("1. Toggle Tkinter Mode (currently: {})".format(
-        "On" if stats_data["tkinter_mode"] else "Off"))
+    print("1. (No Tkinter Mode anymore)")
     print("2. Back")
     choice = input("Choose: ")
 
-    if choice == "1":
-        stats_data["tkinter_mode"] = not stats_data["tkinter_mode"]
-        print("Tkinter Mode is now",
-              "On" if stats_data["tkinter_mode"] else "Off")
-        time.sleep(1)
-    elif choice != "2":
+    if choice != "2":
         print("Invalid option.")
         time.sleep(1)
 
@@ -158,41 +135,10 @@ def settings_menu():
     printhomescreen()
     inmenu = True
 
-def start_tkinter_match():
-    def make_choice(player_choice):
-        ai_choice = random.choice(['r', 'p', 's'])
-        result = get_result(player_choice, ai_choice)
-
-        result_label.config(
-            text=f"You: {choice_names[player_choice]} | A.I.: {choice_names[ai_choice]}\n{result}")
-
-    choice_names = {'r': 'Rock', 'p': 'Paper', 's': 'Scissors'}
-
-    window = tk.Tk()
-    window.title("RPS-RNG (Tkinter Mode)")
-    window.geometry("300x300")
-    window.resizable(False, False)
-
-    tk.Label(window, text="Choose:", font=("Arial", 16)).pack(pady=10)
-    tk.Button(window, text="Rock", command=lambda: make_choice('r'), width=15).pack(pady=5)
-    tk.Button(window, text="Paper", command=lambda: make_choice('p'), width=15).pack(pady=5)
-    tk.Button(window, text="Scissors", command=lambda: make_choice('s'), width=15).pack(pady=5)
-
-    result_label = tk.Label(window, text="", font=("Arial", 12), wraplength=280, pady=10)
-    result_label.pack()
-
-    def on_close():
-        window.destroy()
-        clear()
-        printhomescreen()
-        global inmenu
-        inmenu = True
-
-    window.protocol("WM_DELETE_WINDOW", on_close)
-    window.mainloop()
-
+# Start
 printhomescreen()
 
+# Hoofdlus
 while True:
     while inmenu:
         menuchoice = input("Choice: ")
